@@ -8,7 +8,8 @@ import re
 import csv
 import time
 import argparse
-
+import pyfiglet
+from tqdm import tqdm
 
 def extract_emails(text):
     return set(re.findall(r"[a-z0-9.\-+_]+@[a-z0-9.\-+_]+\.(?!png\b)[a-z]+", text, re.I))
@@ -29,6 +30,8 @@ def get_url_intern(soup, base_url):
 
 if __name__ == "__main__":
     
+    print(pyfiglet.figlet_format("Email Scrapper"))
+    
     parser =  argparse.ArgumentParser(description="Scrap emails from a list of websites")
     parser.add_argument("-f", "--file", help="path to the file containing the websites links", required=True)
     args = parser.parse_args()
@@ -45,10 +48,8 @@ if __name__ == "__main__":
             urls.append(line[1])
             name.append(line[0])
 
-    print("Starting scrapping..." + "\n")
-
-    for url in urls:
-        print(f"Scrapping {url}...")
+    for url in tqdm(urls, ascii=False, ncols=75):
+        print(f"  Scrapping {url}...")
         start_time = time.time()
 
         try : 
@@ -69,9 +70,9 @@ if __name__ == "__main__":
                             csv_writer = csv.writer(csvfile)
                             csv_writer.writerow([name[urls.index(url)], email])
 
-            print(f"Scrapping for {url} done in : {time.time() - start_time} seconds" + "\n")
+            print(f"\033[1;32mScrapping for {url} done in : {time.time() - start_time} seconds\033[0m" + "\n")
 
         except requests.RequestException as e:
-            print(f"Erreur lors du scrapping de {url} : {e}")
+            print(f"\033[1;31mErreur lors du scrapping de {url} : {e}\033[0m" + "\n")
 
-print("Scrapping done.")
+print("\033[1;32mScrapping done.\033[0m")
