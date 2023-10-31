@@ -1,4 +1,4 @@
-# univ-scrapper
+# Email scrapper
 Python script extracts email addresses from a list of websites using libraries like BeautifulSoup and Requests. It parses websites, locates internal links (Non-recursive), and filters unique email addresses, associating them with website names. Users must use it responsibly and comply with website terms and regulations.
 ## Usage 
 ```bash
