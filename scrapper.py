@@ -29,12 +29,12 @@ def get_url_intern(soup, base_url):
 
 if __name__ == "__main__":
     
-    parser =  argparse.ArgumentParser(description="Scrap emails from a list of universities")
-    parser.add_argument("-f", "--file", help="path to the file containing the universities links", required=True)
+    parser =  argparse.ArgumentParser(description="Scrap emails from a list of websites")
+    parser.add_argument("-f", "--file", help="path to the file containing the websites links", required=True)
     args = parser.parse_args()
 
     urls = []
-    univ = []
+    name = []
     extracted_emails = set()
 
     with open(args.file, "r") as csvfile:
@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
         for line in csv_reader:
             urls.append(line[1])
-            univ.append(line[0])
+            name.append(line[0])
 
     print("Starting scrapping..." + "\n")
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
                         extracted_emails.add(email)
                         with open ("emails.csv", "a") as csvfile:
                             csv_writer = csv.writer(csvfile)
-                            csv_writer.writerow([univ[urls.index(url)], email])
+                            csv_writer.writerow([name[urls.index(url)], email])
 
             print(f"Scrapping for {url} done in : {time.time() - start_time} seconds" + "\n")
 
