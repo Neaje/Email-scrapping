@@ -1,5 +1,13 @@
 # Email scrapper
 Python script extracts email addresses from a list of websites using libraries like BeautifulSoup and Requests. It parses websites, locates internal links (Non-recursive), and filters unique email addresses, associating them with website names. Users must use it responsibly and comply with website terms and regulations.
+
+## Installation
+```bash
+git clone https://github.com/Neaje/Email-scrapping.git
+cd Email-scrapping
+pip3.11 install -r requirements.txt
+```
+
 ## Usage 
 ```bash
 python3.11 scrapper.py -f <path_to_your_csv_file>
