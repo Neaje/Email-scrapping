@@ -9,7 +9,6 @@ import csv
 import time
 import argparse
 import pyfiglet
-from tqdm import tqdm
 
 def extract_emails(text):
     return set(re.findall(r"[a-z0-9.\-+_]+@[a-z0-9.\-+_]+\.(?!png\b)[a-z]+", text, re.I))
@@ -42,27 +41,35 @@ if __name__ == "__main__":
 
     with open(args.file, "r") as csvfile:
         csv_reader = csv.reader(csvfile)
+        len_csv = sum(1 for row in csv_reader)
+        csvfile.seek(0)
         next(csv_reader) 
 
         for line in csv_reader:
             urls.append(line[1])
             name.append(line[0])
 
-    for url in tqdm(urls, ascii=False, ncols=75):
-        print(f"  Scrapping {url}...")
+    print(f"\033[1;32mScrapping {len_csv} websites...\033[0m" + "\n")
+
+    for i, url in enumerate(urls):
+        print(f"Scrapping {url} ({i + 1}/{len_csv})...")
         start_time = time.time()
+        links_tried = 0
 
         try : 
             r = requests.get(url)
             soup = BeautifulSoup(r.text, "html.parser")
             links = get_url_intern(soup, url)
+            len_links = len(links)
 
             for link in links:
+                links_tried += 1
                 r = requests.get(link)
                 soup = BeautifulSoup(r.text, "html.parser")
                 emails = extract_emails(r.text)
-
-                for email in emails: 
+                print(f"Links tried for {url} : {links_tried}/{len_links}", end="\r")
+            
+                for email in emails:
                     email = email.lower()
                     if email not in extracted_emails:
                         extracted_emails.add(email)
@@ -70,9 +77,9 @@ if __name__ == "__main__":
                             csv_writer = csv.writer(csvfile)
                             csv_writer.writerow([name[urls.index(url)], email])
 
-            print(f"\033[1;32mScrapping for {url} done in : {time.time() - start_time} seconds\033[0m" + "\n")
+            print(f"\033[1;32mScrapping for {url} done in : {round(time.time() - start_time, 2)} seconds\033[0m" + "\n")
 
         except requests.RequestException as e:
-            print(f"\033[1;31mErreur lors du scrapping de {url} : {e}\033[0m" + "\n")
+            print(f"\033[1;31mError while scrapping {url} : {e}\033[0m" + "\n")
 
 print("\033[1;32mScrapping done.\033[0m")
