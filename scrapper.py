@@ -13,6 +13,16 @@ import pyfiglet
 def extract_emails(text):
     return set(re.findall(r"[a-z0-9.\-+_]+@[a-z0-9.\-+_]+\.(?!png\b)[a-z]+", text, re.I))
 
+def extract_emails_from_wordlist(text, wordlist):
+    emails = set()
+    with open(wordlist, "r") as wordlist_file:
+        wordlist_words = [word.strip() for word in wordlist_file]
+        for word in wordlist_words:
+            pattern = r'\b[\w\.-]*' + re.escape(word) + r'[\w\.-]*@[\w\.-]+'
+            matches = re.findall(pattern, text, re.I)
+            emails.update(matches)
+    return emails
+   
 def get_url_intern(soup, base_url):  
     url_intern = set()
 
@@ -32,7 +42,8 @@ if __name__ == "__main__":
     print(pyfiglet.figlet_format("Email Scrapper"))
     
     parser =  argparse.ArgumentParser(description="Scrap emails from a list of websites")
-    parser.add_argument("-f", "--file", help="path to the file containing the websites links", required=True)
+    parser.add_argument("-f", "--file", help="Path to the file containing the websites links", required=True)
+    parser.add_argument("-w" , "--wordlist", help="Path to the wordlist containing emails pattern", required=False)
     args = parser.parse_args()
 
     urls = []
@@ -49,7 +60,10 @@ if __name__ == "__main__":
             urls.append(line[1])
             name.append(line[0])
 
-    print(f"\033[1;32mScrapping {len_csv} websites...\033[0m" + "\n")
+    if args.wordlist:
+        print(f"\033[1;32mScraping {len_csv} websites using {args.wordlist}...\033[0m" + "\n")
+    else:
+        print(f"\033[1;32mScrapping {len_csv} websites...\033[0m" + "\n")
 
     for i, url in enumerate(urls):
         print(f"Scrapping {url} ({i + 1}/{len_csv})...")
@@ -66,7 +80,11 @@ if __name__ == "__main__":
                 links_tried += 1
                 r = requests.get(link)
                 soup = BeautifulSoup(r.text, "html.parser")
-                emails = extract_emails(r.text)
+
+                if args.wordlist:
+                    emails = extract_emails_from_wordlist(r.text, args.wordlist)
+                else:
+                    emails = extract_emails(r.text)
                 print(f"Links tried for {url} : {links_tried}/{len_links}", end="\r")
             
                 for email in emails:

@@ -10,13 +10,38 @@ pip3.11 install -r requirements.txt
 
 ## Usage 
 ```bash
-python3.11 scrapper.py -f <path_to_your_csv_file>
+ _____                 _ _   ____                                       
+| ____|_ __ ___   __ _(_) | / ___|  ___ _ __ __ _ _ __  _ __   ___ _ __ 
+|  _| | '_ ` _ \ / _` | | | \___ \ / __| '__/ _` | '_ \| '_ \ / _ \ '__|
+| |___| | | | | | (_| | | |  ___) | (__| | | (_| | |_) | |_) |  __/ |   
+|_____|_| |_| |_|\__,_|_|_| |____/ \___|_|  \__,_| .__/| .__/ \___|_|   
+                                                 |_|   |_|              
+
+usage: scrapper.py [-h] -f FILE [-w WORDLIST]
+
+Scrap emails from a list of websites
+
+options:
+  -h, --help            show this help message and exit
+  -f FILE, --file FILE  path to the file containing the websites links
+  -w WORDLIST, --wordlist WORDLIST
+                        path to the wordlist containing emails pattern
 ```
 
 ### Specification
 Your CSV file should be in the following format :
 ```
 <name_of_website>,<link>
+```
+
+And The wordlist should be in the following format :
+```
+<email_pattern>
+```
+
+it will match for example :
+```
+<email_pattern>@exemple.com
 ```
 
 ## Disclaimer: Use of this script 
