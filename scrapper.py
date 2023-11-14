@@ -25,16 +25,12 @@ def extract_emails_from_wordlist(text, wordlist):
    
 def get_url_intern(soup, base_url):  
     url_intern = set()
-
     for a_tag in soup.find_all("a", href=True):
         href = a_tag.attrs['href']
-
         if href.startswith("/"):
             href = base_url.rstrip('/') + '/' + href.lstrip('/')
-
         if base_url in href:
             url_intern.add(href)
-                
     return url_intern
 
 def print_logo(): 
