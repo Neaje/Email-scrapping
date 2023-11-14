@@ -17,15 +17,17 @@ pip3.11 install -r requirements.txt
 |_____|_| |_| |_|\__,_|_|_| |____/ \___|_|  \__,_| .__/| .__/ \___|_|   
                                                  |_|   |_|              
 
-usage: scrapper.py [-h] -f FILE [-w WORDLIST]
+usage: scrapper.py [-h] -f FILE [-w WORDLIST] [-t TIMEOUT]
 
 Scrap emails from a list of websites
 
 options:
   -h, --help            show this help message and exit
-  -f FILE, --file FILE  path to the file containing the websites links
+  -f FILE, --file FILE  Path to the file containing the websites links
   -w WORDLIST, --wordlist WORDLIST
-                        path to the wordlist containing emails pattern
+                        Path to the wordlist containing emails pattern
+  -t TIMEOUT, --timeout TIMEOUT
+                        Timeout in seconds for the requests
 ```
 
 ### Specification
